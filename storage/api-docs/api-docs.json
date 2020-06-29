@@ -1,0 +1,404 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "Hotel checkin API",
+        "version": "1.0.0"
+    },
+    "host": "localhost:8000",
+    "basePath": "/",
+    "schemes": [
+        "http"
+    ],
+    "paths": {
+        "/checkin": {
+            "post": {
+                "tags": [
+                    "Checkin"
+                ],
+                "summary": "Checkin api method",
+                "parameters": [
+                    {
+                        "name": "client_name",
+                        "in": "body",
+                        "description": "Client name",
+                        "required": true,
+                        "schema": {},
+                        "type": "string"
+                    },
+                    {
+                        "name": "phone",
+                        "in": "body",
+                        "description": "Client phone",
+                        "required": true,
+                        "schema": {},
+                        "type": "string"
+                    },
+                    {
+                        "name": "voted_capacity",
+                        "in": "body",
+                        "description": "Voted room capacity",
+                        "required": false,
+                        "schema": {},
+                        "type": "number"
+                    },
+                    {
+                        "name": "checkin_start",
+                        "in": "body",
+                        "description": "Checkin start date",
+                        "required": true,
+                        "schema": {},
+                        "type": "date-time"
+                    },
+                    {
+                        "name": "checkin_end",
+                        "in": "body",
+                        "description": "Checkin end date",
+                        "required": true,
+                        "schema": {},
+                        "type": "date-time"
+                    },
+                    {
+                        "name": "room_id",
+                        "in": "body",
+                        "description": "Room id",
+                        "required": true,
+                        "schema": {},
+                        "type": "number"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Checkin successfully saved",
+                        "schema": {
+                            "type": "application/json"
+                        }
+                    },
+                    "201": {
+                        "description": "Validation error"
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    }
+                }
+            }
+        },
+        "/hotels/{rating}": {
+            "get": {
+                "tags": [
+                    "Hotels"
+                ],
+                "summary": "Get filtered hotels list",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer eyJ0eXAi...",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "description": "application/x-www-form-urlencoded",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "rating",
+                        "in": "path",
+                        "description": "Hotel rating 1-5",
+                        "required": true,
+                        "type": "number"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Hotel list",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Hotel"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    }
+                }
+            }
+        },
+        "/rooms/{?capacity}/{?hotel}/{?category}/{?checkin_start}/{?checkin_end}": {
+            "get": {
+                "tags": [
+                    "Rooms"
+                ],
+                "summary": "Get room list",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer eyJ0eXAi...",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "description": "application/x-www-form-urlencoded",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "capacity",
+                        "in": "path",
+                        "description": "Room capacity",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "name": "hotel",
+                        "in": "path",
+                        "description": "Hotel ID",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "name": "category",
+                        "in": "path",
+                        "description": "Room category",
+                        "required": false,
+                        "type": "number"
+                    },
+                    {
+                        "name": "checkin_start",
+                        "in": "path",
+                        "description": "Checkin start date with Y-m-d format",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "checkin_end",
+                        "in": "path",
+                        "description": "Checkin end date with Y-m-d format",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Room list",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/Room"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorised | Validation error"
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Login"
+                ],
+                "summary": "Get auth token",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "description": "Email",
+                        "required": true,
+                        "schema": {},
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "description": "Password",
+                        "required": true,
+                        "schema": {},
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Room list",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "Logout"
+                ],
+                "summary": "Remove auth token",
+                "responses": {
+                    "200": {
+                        "description": "Logout",
+                        "schema": {
+                            "property": "message",
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/register": {
+            "post": {
+                "tags": [
+                    "Register"
+                ],
+                "summary": "Create new user",
+                "parameters": [
+                    {
+                        "name": "name",
+                        "in": "body",
+                        "description": "Name",
+                        "required": true,
+                        "schema": {},
+                        "type": "string"
+                    },
+                    {
+                        "name": "email",
+                        "in": "body",
+                        "description": "Email",
+                        "required": true,
+                        "schema": {},
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "body",
+                        "description": "Password",
+                        "required": true,
+                        "schema": {},
+                        "type": "string"
+                    },
+                    {
+                        "name": "c_password",
+                        "in": "body",
+                        "description": "Compare password",
+                        "required": true,
+                        "schema": {},
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Register",
+                        "schema": {
+                            "properties": {
+                                "success": {
+                                    "properties": {
+                                        "token": {
+                                            "type": "string"
+                                        },
+                                        "name": {
+                                            "type": "string"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Email already registered | Validation error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "Checkin": {
+            "properties": {
+                "client_name": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "voted_capacity": {
+                    "type": "integer"
+                },
+                "checkin_start": {
+                    "type": "date-time"
+                },
+                "checkin_end": {
+                    "type": "date-time"
+                },
+                "room_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "Hotel": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "rating": {
+                    "type": "integer"
+                }
+            }
+        },
+        "Room": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "capacity": {
+                    "type": "integer"
+                },
+                "category_id": {
+                    "type": "integer"
+                },
+                "hotel_id": {
+                    "type": "integer"
+                }
+            }
+        },
+        "RoomCategory": {
+            "properties": {
+                "title": {
+                    "type": "string"
+                }
+            }
+        },
+        "User": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        }
+    },
+    "responses": {
+        "401": {
+            "description": "Unauthorized user"
+        }
+    }
+}
