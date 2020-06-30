@@ -7,6 +7,10 @@ use App\Models\RoomCategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class CategoriesController
+ * @package App\Http\Controllers\API
+ */
 class CategoriesController extends Controller
 {
     /**
@@ -47,9 +51,9 @@ class CategoriesController extends Controller
         if (Auth::user()) {
             $categories = RoomCategory::query()->get()->toArray();
 
-            return response()->json(['categories' => $categories], 200);
+            return response()->json(['categories' => $categories], $this->successStatus);
         } else {
-            return response()->json(['error' => 'Unauthorised'], 401);
+            return response()->json(['error' => 'Unauthorised'], $this->unauthorisedStatus);
         }
     }
 }

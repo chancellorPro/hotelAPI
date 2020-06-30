@@ -8,9 +8,12 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;
 
+/**
+ * Class UserController
+ * @package App\Http\Controllers\API
+ */
 class UserController extends Controller
 {
-    public $successStatus = 200;
 
     /**
      * @SWG\Post(
@@ -63,7 +66,7 @@ class UserController extends Controller
             $user->save();
             return response()->json(['success' => $success], $this->successStatus);
         } else {
-            return response()->json(['error' => 'Unauthorised'], 401);
+            return response()->json(['error' => 'Unauthorised'], $this->unauthorisedStatus);
         }
     }
 
@@ -88,7 +91,7 @@ class UserController extends Controller
             $request->user()->token()->delete();
         }
 
-        return response()->json(['message' => 'User logged out.'], 200);
+        return response()->json(['message' => 'User logged out.'], $this->successStatus);
     }
 
     /**
@@ -162,14 +165,14 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 401);
+            return response()->json(['error' => $validator->errors()], $this->unauthorisedStatus);
         }
 
         $input = $request->all();
 
         $alreadyRegisteredEmail = User::where('email', $input['email'])->first();
         if ($alreadyRegisteredEmail) {
-            return response()->json(['error' => 'Email already registered'], 401);
+            return response()->json(['error' => 'Email already registered'], $this->unauthorisedStatus);
         }
 
         $input['password'] = bcrypt($input['password']);

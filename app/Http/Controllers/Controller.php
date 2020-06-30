@@ -20,5 +20,9 @@ use Illuminate\Routing\Controller as BaseController;
  */
 class Controller extends BaseController
 {
+    public $successStatus = 200;
+    public $createdStatus = 201;
+    public $unauthorisedStatus = 401;
+
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 }

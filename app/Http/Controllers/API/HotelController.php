@@ -7,6 +7,10 @@ use App\Models\Hotel;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class HotelController
+ * @package App\Http\Controllers\API
+ */
 class HotelController extends Controller
 {
     /**
@@ -56,9 +60,9 @@ class HotelController extends Controller
 
             $hotels = Hotel::where(['rating' => $input['rating']])->get()->toArray();
 
-            return response()->json(['hotels' => $hotels], 200);
+            return response()->json(['hotels' => $hotels], $this->successStatus);
         } else {
-            return response()->json(['error' => 'Unauthorised'], 401);
+            return response()->json(['error' => 'Unauthorised'], $this->unauthorisedStatus);
         }
     }
 }

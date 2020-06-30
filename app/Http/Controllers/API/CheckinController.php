@@ -4,11 +4,15 @@ namespace App\Http\Controllers\API;
 
 use App\Http\Requests\CheckinRequest;
 use App\Models\Checkin;
-use App\Models\Room;
+use App\Services\CheckinService;
 use Carbon\Carbon;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class CheckinController
+ * @package App\Http\Controllers\API
+ */
 class CheckinController extends Controller
 {
 
@@ -90,43 +94,19 @@ class CheckinController extends Controller
             $checkin_start = Carbon::createFromFormat('Y-m-d', $input['checkin_start']);
             $checkin_end = Carbon::createFromFormat('Y-m-d', $input['checkin_end']);
 
-            if ($this->isBusy($input['room_id'], $checkin_start, $checkin_end)) {
-                return response()->json(['error' => 'Room is busy'], 201);
+            if (CheckinService::isBusy($input['room_id'], $checkin_start, $checkin_end)) {
+                return response()->json(['error' => 'Room is busy'], $this->successStatus);
             }
 
-            if (!$this->equalCapacity($input['room_id'], $input['voted_capacity'])) {
-                return response()->json(['error' => 'Selected room is too small for you'], 201);
+            if (!CheckinService::equalCapacity($input['room_id'], $input['voted_capacity'])) {
+                return response()->json(['error' => 'Selected room is too small for you'], $this->successStatus);
             }
 
             Checkin::create($input);
 
-            return response()->json(['success' => 'Checkin successfully saved'], 200);
+            return response()->json(['success' => 'Checkin successfully saved'], $this->createdStatus);
         } else {
-            return response()->json(['error' => 'Unauthorised'], 401);
+            return response()->json(['error' => 'Unauthorised'], $this->unauthorisedStatus);
         }
-    }
-
-    /**
-     * @param $roomId
-     * @param $checkin_start
-     * @param $checkin_end
-     * @return mixed
-     */
-    public function isBusy($roomId, $checkin_start, $checkin_end)
-    {
-        return Checkin::where(['room_id' => $roomId])->where(function ($query) use ($checkin_start, $checkin_end) {
-            $query->whereRaw("checkin_start between '{$checkin_start}' and '{$checkin_end}'")
-                ->orWhereRaw("checkin_end between '{$checkin_start}' and '{$checkin_end}'");
-        })->count();
-    }
-
-    /**
-     * @param $roomId
-     * @param $votedCapacity
-     * @return mixed
-     */
-    public function equalCapacity($roomId, $votedCapacity)
-    {
-        return Room::whereId($roomId)->where('capacity', '>=', $votedCapacity)->count();
     }
 }
