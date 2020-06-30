@@ -17,12 +17,12 @@ class UserController extends Controller
 
     /**
      * @SWG\Post(
-     *     path="/login",
+     *     path="/api/login",
      *     summary="Get auth token",
      *     tags={"Login"},
      *     @SWG\Parameter(
      *         name="email",
-     *         in="body",
+     *         in="formData",
      *         description="Email",
      *         required=true,
      *         type="string",
@@ -30,7 +30,7 @@ class UserController extends Controller
      *     ),
      *     @SWG\Parameter(
      *         name="password",
-     *         in="body",
+     *         in="formData",
      *         description="Password",
      *         required=true,
      *         type="string",
@@ -51,7 +51,7 @@ class UserController extends Controller
      *          )
      *         ),
      *     ),
-     *     @SWG\Response(
+     * @SWG\Response(
      *         response="401",
      *         description="Unauthorized user",
      *     )
@@ -59,7 +59,8 @@ class UserController extends Controller
      */
     public function login()
     {
-        if (Auth::attempt(['email' => request('email'), 'password' => request('password')])) {
+        if (Auth::attempt(['email'    => request('email'),
+                           'password' => request('password')])) {
             $user = Auth::user();
             $success['token'] = $user->createToken('MyApp')->accessToken;
             $user->remember_token = $success['token'];
@@ -72,9 +73,23 @@ class UserController extends Controller
 
     /**
      * @SWG\Post(
-     *     path="/logout",
+     *     path="/api/logout",
      *     summary="Remove auth token",
      *     tags={"Logout"},
+     *     @SWG\Parameter(
+     *         type="string",
+     *         name="Authorization",
+     *         in="header",
+     *         description="Bearer eyJ0eXAi...",
+     *         required=true,
+     *     ),
+     *     @SWG\Parameter(
+     *         name="Content-Type",
+     *         in="header",
+     *         description="application/x-www-form-urlencoded",
+     *         required=true,
+     *         type="string",
+     *     ),
      *     @SWG\Response(
      *         response=200,
      *         description="Logout",
@@ -85,10 +100,12 @@ class UserController extends Controller
      *     )
      * )
      */
-    public function logout(Request $request)
+    public function logout()
     {
         if (Auth::check()) {
-            $request->user()->token()->delete();
+            $user = Auth::user();
+            $user->remember_token = '';
+            $user->save();
         }
 
         return response()->json(['message' => 'User logged out.'], $this->successStatus);
@@ -96,12 +113,12 @@ class UserController extends Controller
 
     /**
      * @SWG\Post(
-     *     path="/register",
+     *     path="/api/register",
      *     summary="Create new user",
      *     tags={"Register"},
      *     @SWG\Parameter(
      *         name="name",
-     *         in="body",
+     *         in="formData",
      *         description="Name",
      *         required=true,
      *         type="string",
@@ -109,7 +126,7 @@ class UserController extends Controller
      *     ),
      *     @SWG\Parameter(
      *         name="email",
-     *         in="body",
+     *         in="formData",
      *         description="Email",
      *         required=true,
      *         type="string",
@@ -117,7 +134,7 @@ class UserController extends Controller
      *     ),
      *     @SWG\Parameter(
      *         name="password",
-     *         in="body",
+     *         in="formData",
      *         description="Password",
      *         required=true,
      *         type="string",
@@ -125,7 +142,7 @@ class UserController extends Controller
      *     ),
      *     @SWG\Parameter(
      *         name="c_password",
-     *         in="body",
+     *         in="formData",
      *         description="Compare password",
      *         required=true,
      *         type="string",

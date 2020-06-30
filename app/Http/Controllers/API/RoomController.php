@@ -15,7 +15,7 @@ class RoomController extends Controller
 {
     /**
      * @SWG\Get(
-     *     path="/rooms/{?capacity}/{?hotel}/{?category}/{?checkin_start}/{?checkin_end}",
+     *     path="/api/rooms?capacity={capacity}&hotel={hotel}&category={category}&checkin_start={checkin_start}&checkin_end={checkin_end}",
      *     summary="Get room list",
      *     tags={"Rooms"},
      *     @SWG\Parameter(

@@ -15,7 +15,7 @@ class HotelController extends Controller
 {
     /**
      * @SWG\Get(
-     *     path="/hotels/{rating}",
+     *     path="/api/hotels?rating={rating}",
      *     summary="Get filtered hotels list",
      *     tags={"Hotels"},
      *     @SWG\Parameter(

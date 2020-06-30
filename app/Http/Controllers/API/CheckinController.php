@@ -18,12 +18,26 @@ class CheckinController extends Controller
 
     /**
      * @SWG\Post(
-     *     path="/checkin",
+     *     path="/api/checkin",
      *     summary="Checkin api method",
      *     tags={"Checkin"},
      *     @SWG\Parameter(
+     *         type="string",
+     *         name="Authorization",
+     *         in="header",
+     *         description="Bearer eyJ0eXAi...",
+     *         required=true,
+     *     ),
+     *     @SWG\Parameter(
+     *         name="Content-Type",
+     *         in="header",
+     *         description="application/x-www-form-urlencoded",
+     *         required=true,
+     *         type="string",
+     *     ),
+     *     @SWG\Parameter(
      *         name="client_name",
-     *         in="body",
+     *         in="formData",
      *         description="Client name",
      *         required=true,
      *         type="string",
@@ -31,7 +45,7 @@ class CheckinController extends Controller
      *     ),
      *     @SWG\Parameter(
      *         name="phone",
-     *         in="body",
+     *         in="formData",
      *         description="Client phone",
      *         required=true,
      *         type="string",
@@ -39,7 +53,7 @@ class CheckinController extends Controller
      *     ),
      *     @SWG\Parameter(
      *         name="voted_capacity",
-     *         in="body",
+     *         in="formData",
      *         description="Voted room capacity",
      *         required=false,
      *         type="number",
@@ -47,23 +61,23 @@ class CheckinController extends Controller
      *     ),
      *     @SWG\Parameter(
      *         name="checkin_start",
-     *         in="body",
+     *         in="formData",
      *         description="Checkin start date",
      *         required=true,
-     *         type="date-time",
+     *         type="string",
      *         @SWG\Schema(),
      *     ),
      *     @SWG\Parameter(
      *         name="checkin_end",
-     *         in="body",
+     *         in="formData",
      *         description="Checkin end date",
      *         required=true,
-     *         type="date-time",
+     *         type="string",
      *         @SWG\Schema(),
      *     ),
      *     @SWG\Parameter(
      *         name="room_id",
-     *         in="body",
+     *         in="formData",
      *         description="Room id",
      *         required=true,
      *         type="number",

@@ -10,7 +10,45 @@
         "http"
     ],
     "paths": {
-        "/checkin": {
+        "/api/categories": {
+            "get": {
+                "tags": [
+                    "Room categories"
+                ],
+                "summary": "Get categories list",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer eyJ0eXAi...",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "description": "application/x-www-form-urlencoded",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Categories list",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/RoomCategory"
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized user"
+                    }
+                }
+            }
+        },
+        "/api/checkin": {
             "post": {
                 "tags": [
                     "Checkin"
@@ -18,8 +56,22 @@
                 "summary": "Checkin api method",
                 "parameters": [
                     {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer eyJ0eXAi...",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "description": "application/x-www-form-urlencoded",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
                         "name": "client_name",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Client name",
                         "required": true,
                         "schema": {},
@@ -27,7 +79,7 @@
                     },
                     {
                         "name": "phone",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Client phone",
                         "required": true,
                         "schema": {},
@@ -35,7 +87,7 @@
                     },
                     {
                         "name": "voted_capacity",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Voted room capacity",
                         "required": false,
                         "schema": {},
@@ -43,23 +95,23 @@
                     },
                     {
                         "name": "checkin_start",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Checkin start date",
                         "required": true,
                         "schema": {},
-                        "type": "date-time"
+                        "type": "string"
                     },
                     {
                         "name": "checkin_end",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Checkin end date",
                         "required": true,
                         "schema": {},
-                        "type": "date-time"
+                        "type": "string"
                     },
                     {
                         "name": "room_id",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Room id",
                         "required": true,
                         "schema": {},
@@ -82,7 +134,7 @@
                 }
             }
         },
-        "/hotels/{rating}": {
+        "/api/hotels?rating={rating}": {
             "get": {
                 "tags": [
                     "Hotels"
@@ -127,7 +179,7 @@
                 }
             }
         },
-        "/rooms/{?capacity}/{?hotel}/{?category}/{?checkin_start}/{?checkin_end}": {
+        "/api/rooms?capacity={capacity}&hotel={hotel}&category={category}&checkin_start={checkin_start}&checkin_end={checkin_end}": {
             "get": {
                 "tags": [
                     "Rooms"
@@ -200,7 +252,7 @@
                 }
             }
         },
-        "/login": {
+        "/api/login": {
             "post": {
                 "tags": [
                     "Login"
@@ -209,7 +261,7 @@
                 "parameters": [
                     {
                         "name": "email",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Email",
                         "required": true,
                         "schema": {},
@@ -217,7 +269,7 @@
                     },
                     {
                         "name": "password",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Password",
                         "required": true,
                         "schema": {},
@@ -243,12 +295,28 @@
                 }
             }
         },
-        "/logout": {
+        "/api/logout": {
             "post": {
                 "tags": [
                     "Logout"
                 ],
                 "summary": "Remove auth token",
+                "parameters": [
+                    {
+                        "name": "Authorization",
+                        "in": "header",
+                        "description": "Bearer eyJ0eXAi...",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
+                        "name": "Content-Type",
+                        "in": "header",
+                        "description": "application/x-www-form-urlencoded",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": "Logout",
@@ -260,7 +328,7 @@
                 }
             }
         },
-        "/register": {
+        "/api/register": {
             "post": {
                 "tags": [
                     "Register"
@@ -269,7 +337,7 @@
                 "parameters": [
                     {
                         "name": "name",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Name",
                         "required": true,
                         "schema": {},
@@ -277,7 +345,7 @@
                     },
                     {
                         "name": "email",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Email",
                         "required": true,
                         "schema": {},
@@ -285,7 +353,7 @@
                     },
                     {
                         "name": "password",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Password",
                         "required": true,
                         "schema": {},
@@ -293,7 +361,7 @@
                     },
                     {
                         "name": "c_password",
-                        "in": "body",
+                        "in": "formData",
                         "description": "Compare password",
                         "required": true,
                         "schema": {},

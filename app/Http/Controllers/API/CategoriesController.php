@@ -15,7 +15,7 @@ class CategoriesController extends Controller
 {
     /**
      * @SWG\Get(
-     *     path="/categories",
+     *     path="/api/categories",
      *     summary="Get categories list",
      *     tags={"Room categories"},
      *     @SWG\Parameter(
