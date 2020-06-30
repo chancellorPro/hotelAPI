@@ -2,14 +2,12 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Requests\CheckinRequest;
 use App\Models\Checkin;
 use App\Models\Room;
 use Carbon\Carbon;
-use Illuminate\Http\JsonResponse as Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Validator;
 
 class CheckinController extends Controller
 {
@@ -84,23 +82,10 @@ class CheckinController extends Controller
      *     )
      * )
      */
-    public function checkin(Request $request)
+    public function checkin(CheckinRequest $request)
     {
         if (Auth::user()) {
             $input = $request->all();
-
-            $validator = Validator::make($input, [
-                'client_name'    => 'required|string|max:255',
-                'phone'          => 'required|string|max:32',
-                'voted_capacity' => 'nullable|numeric',
-                'checkin_start'  => 'required|date',
-                'checkin_end'    => 'required|date|after_or_equal:checkin_start',
-                'room_id'        => 'required|exists:rooms,id',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()], 201);
-            }
 
             $checkin_start = Carbon::createFromFormat('Y-m-d', $input['checkin_start']);
             $checkin_end = Carbon::createFromFormat('Y-m-d', $input['checkin_end']);

@@ -2,13 +2,11 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Http\Requests\RoomRequest;
 use App\Models\Checkin;
 use App\Models\Room;
-use Illuminate\Http\JsonResponse as Response;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Validator;
 
 class RoomController extends Controller
 {
@@ -80,22 +78,10 @@ class RoomController extends Controller
      *     )
      * )
      */
-    public function rooms(Request $request)
+    public function rooms(RoomRequest $request)
     {
         if (Auth::user()) {
             $input = $request->all();
-
-            $validator = Validator::make($input, [
-                'capacity'      => 'nullable|numeric',
-                'hotel'         => 'nullable|exists:hotels,id',
-                'category'      => 'nullable|exists:room_categories,id',
-                'checkin_start' => 'nullable|date',
-                'checkin_end'   => 'nullable|date',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json(['error' => $validator->errors()], 401);
-            }
 
             $roomsBuilder = Room::query();
 

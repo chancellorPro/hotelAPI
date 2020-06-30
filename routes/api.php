@@ -18,6 +18,7 @@ Route::post('login', 'API\UserController@login');
 Route::post('register', 'API\UserController@register');
 
 Route::middleware(['auth:api'])->group(function () {
+    Route::get('categories', 'API\CategoriesController@categories');
     Route::post('checkin', 'API\CheckinController@checkin');
     Route::get('hotels', 'API\HotelController@hotels');
     Route::get('rooms', 'API\RoomController@rooms');

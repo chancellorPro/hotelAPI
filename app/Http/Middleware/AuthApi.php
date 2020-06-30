@@ -5,7 +5,6 @@ namespace App\Http\Middleware;
 use App\Exceptions\User\UserNotFoundException;
 use App\Models\User;
 use Closure;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -23,8 +22,6 @@ class AuthApi
      * @param Closure $next Closure
      *
      * @return mixed
-     *
-     * @throws UserNotFoundException
      */
     public function handle(Request $request, Closure $next)
     {
@@ -42,7 +39,7 @@ class AuthApi
             } else {
                     return redirect('/');
             }
-        } catch (ModelNotFoundException $exception) {
+        } catch (UserNotFoundException $exception) {
             return back()->withError($exception->getMessage())->withInput();
         }
 

@@ -15,11 +15,11 @@ class CreateCheckinTable extends Migration
     {
         Schema::create('checkin', function (Blueprint $table) {
             $table->id();
-            $table->string('client_name', 255);
             $table->string('phone', 32);
-            $table->integer('voted_capacity')->default(1);
             $table->dateTime('checkin_start');
+            $table->string('client_name', 255);
             $table->dateTime('checkin_end')->nullable();
+            $table->integer('voted_capacity')->default(1);
             $table->unsignedInteger('room_id')->index('room_id_index');
             $table->timestamps();
         });

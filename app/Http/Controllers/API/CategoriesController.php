@@ -2,18 +2,18 @@
 
 namespace App\Http\Controllers\API;
 
-use App\Http\Requests\HotelRequest;
-use App\Models\Hotel;
 use App\Http\Controllers\Controller;
+use App\Models\RoomCategory;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
-class HotelController extends Controller
+class CategoriesController extends Controller
 {
     /**
      * @SWG\Get(
-     *     path="/hotels/{rating}",
-     *     summary="Get filtered hotels list",
-     *     tags={"Hotels"},
+     *     path="/categories",
+     *     summary="Get categories list",
+     *     tags={"Room categories"},
      *     @SWG\Parameter(
      *         type="string",
      *         name="Authorization",
@@ -28,19 +28,12 @@ class HotelController extends Controller
      *         required=true,
      *         type="string",
      *     ),
-     *     @SWG\Parameter(
-     *         name="rating",
-     *         in="path",
-     *         description="Hotel rating 1-5",
-     *         required=true,
-     *         type="number",
-     *     ),
      *     @SWG\Response(
      *         response=200,
-     *         description="Hotel list",
+     *         description="Categories list",
      *         @SWG\Schema(
      *             type="array",
-     *             @SWG\Items(ref="#/definitions/Hotel")
+     *             @SWG\Items(ref="#/definitions/RoomCategory")
      *         ),
      *     ),
      *     @SWG\Response(
@@ -49,14 +42,12 @@ class HotelController extends Controller
      *     )
      * )
      */
-    public function hotels(HotelRequest $request)
+    public function categories(Request $request)
     {
         if (Auth::user()) {
-            $input = $request->all();
+            $categories = RoomCategory::query()->get()->toArray();
 
-            $hotels = Hotel::where(['rating' => $input['rating']])->get()->toArray();
-
-            return response()->json(['hotels' => $hotels], 200);
+            return response()->json(['categories' => $categories], 200);
         } else {
             return response()->json(['error' => 'Unauthorised'], 401);
         }

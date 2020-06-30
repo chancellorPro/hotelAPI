@@ -16,9 +16,9 @@ class CreateRoomsTable extends Migration
         Schema::create('rooms', function (Blueprint $table) {
             $table->id();
             $table->string('name', 128);
-            $table->unsignedInteger('category_id');
             $table->unsignedInteger('capacity')->default(1);
             $table->unsignedInteger('hotel_id')->index('hotel_id_index');
+            $table->unsignedInteger('category_id')->index('category_id_index');
         });
     }
 
