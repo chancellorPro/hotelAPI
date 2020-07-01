@@ -24,7 +24,7 @@ class HotelRequest extends FormRequest
     public function rules()
     {
         return [
-            'rating' => 'required|numeric',
+            'rating' => 'nullable|numeric',
         ];
     }
 }

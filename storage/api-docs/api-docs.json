@@ -159,7 +159,7 @@
                         "name": "rating",
                         "in": "path",
                         "description": "Hotel rating 1-5",
-                        "required": true,
+                        "required": false,
                         "type": "number"
                     }
                 ],
