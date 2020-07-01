@@ -36,7 +36,7 @@ class HotelController extends Controller
      *         name="rating",
      *         in="path",
      *         description="Hotel rating 1-5",
-     *         required=true,
+     *         required=false,
      *         type="number",
      *     ),
      *     @SWG\Response(
@@ -58,7 +58,13 @@ class HotelController extends Controller
         if (Auth::user()) {
             $input = $request->all();
 
-            $hotels = Hotel::where(['rating' => $input['rating']])->get()->toArray();
+            $hotelsBuilder = Hotel::query();
+
+            if (isset($input['rating'])) {
+                $hotelsBuilder->where(['rating' => $input['rating']]);
+            }
+
+            $hotels = $hotelsBuilder->get()->toArray();
 
             return response()->json(['hotels' => $hotels], $this->successStatus);
         } else {
