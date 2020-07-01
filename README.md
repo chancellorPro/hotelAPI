@@ -38,3 +38,5 @@ php artisan serve
 ```
 
 Now go to [Swagger](http://127.0.0.1:8000/api/documentation) and test API endpoints
+
+NOTICE: Swagger do not support empty values. Use Postman to test it.
