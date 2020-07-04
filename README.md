@@ -21,6 +21,10 @@ php artisan key:generate
 ```
 - then need to prepare the database on your host
 ```
+CREATE USER 'laraveluser'@'localhost' IDENTIFIED BY 'your_laravel_db_password';
+GRANT ALL PRIVILEGES ON laravel.* TO 'laraveluser'@'localhost';
+```
+```
 php artisan migrate --seed
 ```
 ```
